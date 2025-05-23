@@ -1,18 +1,31 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>Boats List</h1>
+    <ul>
+      <li v-for="boat in boats" :key="boat._id">
+        {{ boat.ime_broda }} - {{ boat.vrsta_broda }} - Length:
+        {{ boat.duzina }}m
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import api from "../api.js";
 
 export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      boats: [],
+    };
+  },
+  async created() {
+    try {
+      const response = await api.get("/boats/all");
+      this.boats = response.data;
+    } catch (error) {
+      console.error("Error fetching boats:", error);
+    }
+  },
+};
 </script>
